@@ -12,10 +12,23 @@ abstract class Model
 
 
     /**
+     * Получает имя таблицы.
+     */
+    abstract protected function getTableName(): string;
+
+    /**
      * Устанавливает экземпляр базы данных.
      */
     public static function setDB(DB $db): void
     {
         static::$db = $db;
+    }
+
+    /**
+     * Получает экземпляр таблицы.
+     */
+    public function table(): Table
+    {
+        return static::$db->table($this->getTableName());
     }
 }
