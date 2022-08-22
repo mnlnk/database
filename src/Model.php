@@ -17,19 +17,6 @@ abstract class Model
 
 
     /**
-     * Конструктор.
-     */
-    public function __construct()
-    {
-        if (! $this->table) {
-            $n = explode('\\', static::class);
-            $n = $n[count($n)-1];
-
-            $this->table = substr($n, 0, -5).'s';
-        }
-    }
-
-    /**
      * Устанавливает экземпляр базы данных.
      */
     public static function setDB(DB $db): void
@@ -38,10 +25,24 @@ abstract class Model
     }
 
     /**
+     * Получает имя таблицы.
+     */
+    protected function getTableName(): string
+    {
+        if (! $this->table) {
+            $class = explode('\\', static::class);
+
+            $this->table = substr($class[count($class)-1], 0, -5).'s';
+        }
+
+        return $this->table;
+    }
+
+    /**
      * Получает экземпляр таблицы.
      */
     public function table(): Table
     {
-        return static::$db->table($this->table);
+        return static::$db->table($this->getTableName());
     }
 }
