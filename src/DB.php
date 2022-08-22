@@ -12,7 +12,7 @@ class DB
     /**
      * Массив выполненных запросов.
      */
-    protected array $queries = [];
+    protected static array $queries = [];
 
 
     /**
@@ -40,11 +40,13 @@ class DB
         $pdo = $this->connector->getPdo();
 
         try {
-            $this->queries[] = compact('sql', 'params');
+            static::$queries[] = compact('sql', 'params');
 
             $pdo->beginTransaction();
+
             $stmt = $pdo->prepare($sql);
             $stmt->execute($params);
+
             $pdo->commit();
 
             return $stmt;
@@ -59,8 +61,8 @@ class DB
     /**
      * Получает массив выполненных запросов.
      */
-    public function getQueries(): array
+    public static function getQueries(): array
     {
-        return $this->queries;
+        return static::$queries;
     }
 }
