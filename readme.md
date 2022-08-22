@@ -15,67 +15,103 @@ composer require mnlnk/database
 
 ##### Пример:
 
+###### Создание экземпляра БД
+
 ```php
 use Manuylenko\DataBase\Connectors\MySQLConnector;
 use Manuylenko\DataBase\DB;
 
-$dbname = 'database';
+$name = 'database';
 $user = 'mnlnk';
 $passwd = 'LvQ_]uP.OfxE!kFp';
 $host = 'localhost';
 
-$connector = new MySQLConnector($user, $passwd, $dbname, $host);
-
+$connector = new MySQLConnector($user, $passwd, $name, $host);
 $db = new DB($connector);
 ```
 
-```php
-/**
- * Простые SQL запросы.
- */
+###### Создание простых SQL запросов
 
-$array = $db->query("SELECT * FROM Artists")->fetchAll();
+```php
+// Получение одной записи
+$stmt = $db->query('SELECT Album FROM Artists WHERE Singer = ?', [
+    'The Prodigy'
+]);
+
+$row = $stmt->fetch();
 ```
 
 ```php
-/**
- * Конструктор запросов.
- */
+// Получение массива записей
+$stmt = $db->query('SELECT * FROM Artists');
 
+$rows = $stmt->fetchAll();
+```
+
+```php
+// Добавление записи 
+$db->query('INSERT INTO * FROM Artists', [
+    'Singer' => 'The Prodigy',
+    'Album' => 'Music For The Jilted Generation',
+    'Year' => '1994',
+    'Sale' => 1500000
+]);
+```
+
+###### Создание запросов с помощью конструктора
+
+```php
+// Экземпляр таблицы
 $table = $db->table('Artists');
+```
 
-// INSERT INTO
+```php
+// Добавление записи в таблицу
 $table->insert([
     'Singer' => 'The Prodigy',
     'Album' => 'Music For The Jilted Generation',
     'Year' => '1994',
     'Sale' => 1500000
 ]);
+```
 
-// SELECT
-$array = $table
+```php
+// Получение массива записей
+$rows = $table 
     ->column('Singer')
     ->where('Year', '>=', '1994')
     ->group('Singer')
     ->fetchColumn(0)
-    ->select();
-    
-// SELECT
-$value = $table
+    ->select(); 
+```
+
+```php
+// Получение одной записи
+$row = $table
     ->column('Singer')
     ->where('Year', '>=', '2000')
     ->get();
+```
 
-
-// UPDATE
+```php
+// Обновление записи
 $table
     ->where('Id', '=', '73')
     ->update([
         'Singer' => 'Massive Attack',
     ]);
+```
 
-// DELETE
+```php
+// Удаление записи
 $table
     ->where('Id', '=', '73')
     ->delete();
+```
+
+###### Дополнительные возможности
+
+```php
+// Получение списка выполненных запросов
+$queries = DB::getQueries(); 
 ```
