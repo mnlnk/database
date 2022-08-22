@@ -10,11 +10,24 @@ abstract class Model
      */
     protected static DB $db;
 
+    /**
+     * Имя таблицы.
+     */
+    protected string $table = '';
+
 
     /**
-     * Получает имя таблицы.
+     * Конструктор.
      */
-    abstract protected function getTableName(): string;
+    public function __construct()
+    {
+        if (! $this->table) {
+            $n = explode('\\', static::class);
+            $n = $n[count($n)-1];
+
+            $this->table = substr($n, 0, -5).'s';
+        }
+    }
 
     /**
      * Устанавливает экземпляр базы данных.
@@ -29,6 +42,6 @@ abstract class Model
      */
     public function table(): Table
     {
-        return static::$db->table($this->getTableName());
+        return static::$db->table($this->table);
     }
 }
