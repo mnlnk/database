@@ -5,7 +5,7 @@ namespace Manuylenko\DataBase;
 
 use PDO;
 
-class Table extends QueryBuilder
+class Query extends QueryBuilder
 {
     /**
      * Тип возвращаемого результата.
@@ -18,17 +18,9 @@ class Table extends QueryBuilder
      */
     public function __construct(
         protected DB $db,
-        protected string $name
+        protected string $table
     ) {
         //
-    }
-
-    /**
-     * Получает имя таблицы.
-     */
-    protected function getTable(): string
-    {
-        return $this->name;
     }
 
     /* -- */

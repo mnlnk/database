@@ -6,6 +6,11 @@ namespace Manuylenko\DataBase;
 abstract class QueryBuilder
 {
     /**
+     * Имя таблицы.
+     */
+    protected string $table = '';
+
+    /**
      * Столбцы.
      */
     protected array $columns = [];
@@ -49,12 +54,6 @@ abstract class QueryBuilder
      * Параметры.
      */
     protected array $bind = [];
-
-
-    /**
-     * Получает имя таблицы.
-     */
-    abstract protected function getTable(): string;
 
 
     /**
@@ -126,7 +125,7 @@ abstract class QueryBuilder
 
         $this->bind = array_values($row);
 
-        return 'INSERT INTO '.$this->getTable().' ('.$keys.') VALUES ('.$values.')';
+        return 'INSERT INTO '.$this->table.' ('.$keys.') VALUES ('.$values.')';
     }
 
     /**
@@ -136,7 +135,7 @@ abstract class QueryBuilder
     {
         $columns = count($this->columns) ? implode(', ', $this->columns) : '*';
 
-        return 'SELECT '.$columns.' FROM '.$this->getTable().$this->buildParams();
+        return 'SELECT '.$columns.' FROM '.$this->table.$this->buildParams();
     }
 
     /**
@@ -148,7 +147,7 @@ abstract class QueryBuilder
 
         $this->bind = array_merge(array_values($row), $this->bind);
 
-        return 'UPDATE '.$this->getTable().' SET '.$update.$this->buildParams();
+        return 'UPDATE '.$this->table.' SET '.$update.$this->buildParams();
     }
 
     /**
@@ -156,7 +155,7 @@ abstract class QueryBuilder
      */
     protected function buildDelete(): string
     {
-        return 'DELETE FROM '.$this->getTable().$this->buildParams();
+        return 'DELETE FROM '.$this->table.$this->buildParams();
     }
 
     /**

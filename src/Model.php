@@ -25,9 +25,17 @@ abstract class Model
     }
 
     /**
+     * Получает экземпляр конструктора запроса.
+     */
+    public function query(): Query
+    {
+        return static::$db->getQueryInstance($this->getTable());
+    }
+
+    /**
      * Получает имя таблицы.
      */
-    protected function getTableName(): string
+    protected function getTable(): string
     {
         if (! $this->table) {
             $class = explode('\\', static::class);
@@ -36,13 +44,5 @@ abstract class Model
         }
 
         return $this->table;
-    }
-
-    /**
-     * Получает экземпляр таблицы.
-     */
-    public function table(): Table
-    {
-        return static::$db->table($this->getTableName());
     }
 }

@@ -25,11 +25,11 @@ class DB
     }
 
     /**
-     * Получает экземпляр таблицы.
+     * Получает экземпляр конструктора запроса.
      */
-    public function table(string $name): Table
+    public function getQueryInstance(string $table): Query
     {
-        return new Table($this, $name);
+        return new Query($this, $table);
     }
 
     /**
