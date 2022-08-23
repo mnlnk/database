@@ -59,4 +59,28 @@ abstract class Model
 
         return $this->table;
     }
+
+    /**
+     * Устанавливает атрибут.
+     */
+    protected function setAttribute(string $key, mixed $value): void
+    {
+        $this->attributes[$key] = $value;
+    }
+
+    /**
+     * Получает атрибут.
+     */
+    protected function getAttribute(string $key): mixed
+    {
+        return $this->attributes[$key] ?? null;
+    }
+
+    /**
+     * Получает все атрибуты.
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
 }
