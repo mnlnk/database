@@ -11,6 +11,13 @@ abstract class Model
     protected string $table = '';
 
     /**
+     * Атрибуты модели.
+     */
+    protected array $attributes = [
+        //
+    ];
+
+    /**
      * Экземпляр базы данных.
      */
     protected static DB $db;
