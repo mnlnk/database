@@ -15,9 +15,7 @@ abstract class Model implements ArrayAccess
     /**
      * Атрибуты модели.
      */
-    protected array $attributes = [
-        //
-    ];
+    protected array $attributes = [];
 
     /**
      * Экземпляр базы данных.
@@ -116,5 +114,21 @@ abstract class Model implements ArrayAccess
     public function offsetUnset(mixed $offset): void
     {
         unset($this->attributes[$offset]);
+    }
+
+    /**
+     * Динамическое получение значения атрибута.
+     */
+    public function __set(string $name, mixed $value): void
+    {
+         $this->setAttribute($name, $value);
+    }
+
+    /**
+     * Динамическая установка значения атрибута.
+     */
+    public function __get(string $name): mixed
+    {
+        return $this->getAttribute($name);
     }
 }
