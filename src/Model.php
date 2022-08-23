@@ -29,6 +29,10 @@ abstract class Model
      */
     public function query(): Query
     {
+        if (! isset(static::$db)) {
+            throw new DBException('Отсутствует экземпляр объекта базы данных.');
+        }
+
         return static::$db->getQueryInstance($this->getTable());
     }
 
