@@ -6,14 +6,14 @@ namespace Manuylenko\DataBase;
 abstract class Model
 {
     /**
-     * Экземпляр базы данных.
-     */
-    protected static DB $db;
-
-    /**
      * Имя таблицы.
      */
     protected string $table = '';
+
+    /**
+     * Экземпляр базы данных.
+     */
+    protected static DB $db;
 
 
     /**
@@ -38,9 +38,12 @@ abstract class Model
     protected function getTable(): string
     {
         if (! $this->table) {
-            $class = explode('\\', static::class);
+            $name = explode('\\', static::class);
+            $name = $name[count($name) - 1];
+            $name = str_replace('Model', '', $name);
+            $name = $name.(preg_match('#[+]s$#', $name) == 0 ? 's' : '');
 
-            $this->table = substr($class[count($class)-1], 0, -5).'s';
+            $this->table = $name;
         }
 
         return $this->table;
