@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Manuylenko\DataBase;
 
-abstract class Model
+use ArrayAccess;
+
+abstract class Model implements ArrayAccess
 {
     /**
      * Имя таблицы.
@@ -61,7 +63,7 @@ abstract class Model
     }
 
     /**
-     * Устанавливает атрибут.
+     * Устанавливает значение атрибута.
      */
     protected function setAttribute(string $key, mixed $value): void
     {
@@ -69,7 +71,7 @@ abstract class Model
     }
 
     /**
-     * Получает атрибут.
+     * Получает значение атрибута.
      */
     protected function getAttribute(string $key): mixed
     {
@@ -77,10 +79,42 @@ abstract class Model
     }
 
     /**
-     * Получает все атрибуты.
+     * Получает массив всех атрибутов.
      */
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    /**
+     * Проверяет существование атрибута.
+     */
+    public function offsetExists(mixed $offset): bool
+    {
+        return isset($this->attributes[$offset]);
+    }
+
+    /**
+     * Получает значение атрибута.
+     */
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->getAttribute($offset);
+    }
+
+    /**
+     * Устанавливает значение атрибута.
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        $this->setAttribute($offset, $value);
+    }
+
+    /**
+     * Удаляет атрибут.
+     */
+    public function offsetUnset(mixed $offset): void
+    {
+        unset($this->attributes[$offset]);
     }
 }
