@@ -34,7 +34,7 @@ abstract class Model implements ArrayAccess
     /**
      * Получает экземпляр конструктора запроса.
      */
-    public function query(): Query
+    protected function query(): Query
     {
         if (! isset(static::$db)) {
             throw new DBException('Отсутствует экземпляр объекта базы данных.');
