@@ -13,6 +13,11 @@ abstract class Model implements ArrayAccess
     protected string $table = '';
 
     /**
+     * Первичный ключ.
+     */
+    protected string $key = 'id';
+
+    /**
      * Массив атрибутов.
      */
     protected array $attributes = [];
