@@ -54,10 +54,7 @@ abstract class Model implements ArrayAccess
     protected function getTable(): string
     {
         if (! $this->table) {
-            $name = explode('\\', static::class);
-            $name = $name[count($name) - 1];
-            $name = str_replace('Model', '', $name);
-            $name = $name.(preg_match('#[+]s$#', $name) == 0 ? 's' : '');
+            $name = str_replace('Model', '', basename(static::class, 's')).'s';
 
             $this->table = $this->toSnake($name);
         }
@@ -71,6 +68,7 @@ abstract class Model implements ArrayAccess
     protected function setAttribute(string $key, mixed $value): void
     {
         $this->attributes[$key] = $value;
+
         $this->changed[$key] = true;
     }
 
