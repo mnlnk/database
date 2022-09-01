@@ -59,7 +59,7 @@ abstract class Model implements ArrayAccess
             $name = str_replace('Model', '', $name);
             $name = $name.(preg_match('#[+]s$#', $name) == 0 ? 's' : '');
 
-            $this->table = $name;
+            $this->table = $this->toSnake($name);
         }
 
         return $this->table;
@@ -123,11 +123,19 @@ abstract class Model implements ArrayAccess
     }
 
     /**
+     * Корректирует имя атрибута.
+     */
+    protected function toSnake(string $name): string
+    {
+        return strtolower(ltrim(preg_replace('/[A-Z]/', '_$0', $name), '_'));
+    }
+
+    /**
      * Динамическое получение значения атрибута.
      */
     public function __set(string $name, mixed $value): void
     {
-         $this->setAttribute($name, $value);
+         $this->setAttribute($this->toSnake($name), $value);
     }
 
     /**
@@ -135,6 +143,6 @@ abstract class Model implements ArrayAccess
      */
     public function __get(string $name): mixed
     {
-        return $this->getAttribute($name);
+        return $this->getAttribute($this->toSnake($name));
     }
 }
