@@ -13,9 +13,14 @@ abstract class Model implements ArrayAccess
     protected string $table = '';
 
     /**
-     * Атрибуты модели.
+     * Массив атрибутов.
      */
     protected array $attributes = [];
+
+    /**
+     * Массив имен атрибутов которые были изменены.
+     */
+    protected array $changed = [];
 
     /**
      * Экземпляр базы данных.
@@ -66,6 +71,7 @@ abstract class Model implements ArrayAccess
     protected function setAttribute(string $key, mixed $value): void
     {
         $this->attributes[$key] = $value;
+        $this->changed[$key] = true;
     }
 
     /**
