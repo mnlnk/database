@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Manuylenko\DataBase;
 
-use ArrayAccess;
 use Manuylenko\StringHelper\Str;
 
-abstract class Model implements ArrayAccess
+abstract class Model
 {
     /**
      * Имя таблицы.
@@ -94,38 +93,6 @@ abstract class Model implements ArrayAccess
     public function getAttributes(): array
     {
         return $this->attributes;
-    }
-
-    /**
-     * Проверяет существование атрибута.
-     */
-    public function offsetExists(mixed $offset): bool
-    {
-        return isset($this->attributes[$offset]);
-    }
-
-    /**
-     * Получает значение атрибута.
-     */
-    public function offsetGet(mixed $offset): mixed
-    {
-        return $this->getAttribute($offset);
-    }
-
-    /**
-     * Устанавливает значение атрибута.
-     */
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        $this->setAttribute($offset, $value);
-    }
-
-    /**
-     * Удаляет атрибут.
-     */
-    public function offsetUnset(mixed $offset): void
-    {
-        unset($this->attributes[$offset]);
     }
 
     /**
