@@ -74,7 +74,9 @@ abstract class Model implements ArrayAccess
     {
         $this->attributes[$key] = $value;
 
-        $this->changed[$key] = true;
+        if (! in_array($key, $this->changed)) {
+            $this->changed[] = $key;
+        }
     }
 
     /**
