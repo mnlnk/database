@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Manuylenko\DataBase;
 
 use ArrayAccess;
+use Manuylenko\StringHelper\Str;
 
 abstract class Model implements ArrayAccess
 {
@@ -61,7 +62,7 @@ abstract class Model implements ArrayAccess
         if (! $this->table) {
             $name = str_replace('Model', '', basename(static::class, 's')).'s';
 
-            $this->table = $this->toSnake($name);
+            $this->table = Str::toSnake($name);
         }
 
         return $this->table;
@@ -128,19 +129,11 @@ abstract class Model implements ArrayAccess
     }
 
     /**
-     * Корректирует имя атрибута.
-     */
-    protected function toSnake(string $name): string
-    {
-        return strtolower(ltrim(preg_replace('/[A-Z]/', '_$0', $name), '_'));
-    }
-
-    /**
      * Динамическое получение значения атрибута.
      */
     public function __set(string $name, mixed $value): void
     {
-         $this->setAttribute($this->toSnake($name), $value);
+         $this->setAttribute(Str::toSnake($name), $value);
     }
 
     /**
@@ -148,6 +141,6 @@ abstract class Model implements ArrayAccess
      */
     public function __get(string $name): mixed
     {
-        return $this->getAttribute($this->toSnake($name));
+        return $this->getAttribute(Str::toSnake($name));
     }
 }
