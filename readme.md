@@ -113,5 +113,10 @@ $table
 
 ```php
 // Получение списка выполненных запросов
-$queries = DB::getQueries(); 
+$queries = DB::getQueries();
+```
+
+```php
+// Получение количество выполненных запросов
+$countQueries = DB::getCountQueries();
 ```

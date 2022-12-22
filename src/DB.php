@@ -65,4 +65,12 @@ class DB
     {
         return static::$queries;
     }
+
+    /**
+     * Получает количество выполненных запросов.
+     */
+    public static function getCountQueries(): int
+    {
+        return count(static::$queries);
+    }
 }
