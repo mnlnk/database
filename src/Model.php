@@ -42,15 +42,15 @@ abstract class Model
     }
 
     /**
-     * Получает экземпляр конструктора запроса.
+     * Получает экземпляр конструктора запроса для таблицы текущей модели.
      */
-    protected function query(): Query
+    protected function table(): Query
     {
         if (! isset(static::$db)) {
             throw new DBException('Отсутствует экземпляр объекта базы данных.');
         }
 
-        return static::$db->getQueryInstance($this->getTable());
+        return static::$db->getQueryInstanceForTable($this->getTable());
     }
 
     /**
