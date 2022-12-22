@@ -61,8 +61,8 @@ $db->query('INSERT INTO * FROM Artists', [
 ###### Создание запросов с помощью конструктора
 
 ```php
-// Экземпляр таблицы
-$table = $db->table('Artists');
+// Получение экземпляра запроса для таблицы
+$table = $db->getQueryInstanceForTable('Artists');
 ```
 
 ```php

@@ -27,7 +27,7 @@ class DB
     /**
      * Получает экземпляр конструктора запроса.
      */
-    public function getQueryInstance(string $table): Query
+    public function getQueryInstanceForTable(string $table): Query
     {
         return new Query($this, $table);
     }
