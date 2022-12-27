@@ -8,28 +8,28 @@ use Manuylenko\StringHelper\Str;
 abstract class Model
 {
     /**
-     * Имя таблицы.
+     * Имя таблицы
      */
     protected string $table = '';
 
     /**
-     * Массив атрибутов.
+     * Массив атрибутов модели.
      */
     protected array $attributes = [];
 
     /**
-     * Массив имен атрибутов которые были изменены.
+     * Массив атрибутов которые были изменены
      */
     protected array $changed = [];
 
     /**
-     * Экземпляр базы данных.
+     * Экземпляр базы данных
      */
     protected static DB $db;
 
 
     /**
-     * Устанавливает экземпляр базы данных.
+     * Устанавливает экземпляр базы данных
      */
     public static function setDB(DB $db): void
     {
@@ -37,9 +37,9 @@ abstract class Model
     }
 
     /**
-     * Получает экземпляр конструктора запроса для таблицы текущей модели.
+     * Получает экземпляр запроса для таблицы модели
      */
-    protected function table(): Query
+    protected function query(): Query
     {
         if (! isset(static::$db)) {
             throw new DBException('Отсутствует экземпляр объекта базы данных.');
@@ -49,7 +49,7 @@ abstract class Model
     }
 
     /**
-     * Получает имя таблицы.
+     * Получает имя таблицы
      */
     protected function getTable(): string
     {
@@ -63,7 +63,7 @@ abstract class Model
     }
 
     /**
-     * Устанавливает значение атрибута.
+     * Устанавливает значение атрибута
      */
     protected function setAttribute(string $key, mixed $value): void
     {
@@ -75,7 +75,7 @@ abstract class Model
     }
 
     /**
-     * Получает значение атрибута.
+     * Получает значение атрибута
      */
     protected function getAttribute(string $key): mixed
     {
@@ -83,7 +83,7 @@ abstract class Model
     }
 
     /**
-     * Получает массив всех атрибутов.
+     * Получает массив всех атрибутов
      */
     public function getAttributes(): array
     {
@@ -91,7 +91,7 @@ abstract class Model
     }
 
     /**
-     * Динамическое получение значения атрибута.
+     * Динамическое получение значения атрибута
      */
     public function __set(string $name, mixed $value): void
     {
@@ -99,7 +99,7 @@ abstract class Model
     }
 
     /**
-     * Динамическая установка значения атрибута.
+     * Динамическая установка значения атрибута
      */
     public function __get(string $name): mixed
     {
