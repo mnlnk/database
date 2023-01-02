@@ -23,12 +23,12 @@ abstract class Model
     protected bool $exists = false;
 
     /**
-     * Массив атрибутов модели.
+     * Массив атрибутов модели
      */
     protected array $attributes = [];
 
     /**
-     * Массив атрибутов которые были изменены
+     * Массив имен атрибутов которые были изменены
      */
     protected array $changed = [];
 
@@ -61,7 +61,7 @@ abstract class Model
      */
     protected function query(): Query
     {
-        if (! isset(static::$db)) {
+        if (!isset(static::$db)) {
             throw new DBException('Отсутствует экземпляр объекта базы данных.');
         }
 
@@ -73,7 +73,7 @@ abstract class Model
      */
     protected function getTable(): string
     {
-        if (! $this->table) {
+        if (!$this->table) {
             $name = str_replace('Model', '', basename(static::class, 's')).'s';
 
             $this->table = Str::toSnake($name);
@@ -87,11 +87,10 @@ abstract class Model
      */
     protected function load(array $attributes): static
     {
-       $this->attributes = array_merge($this->attributes, $attributes);
+        $this->exists = true;
+        $this->attributes = array_merge($this->attributes, $attributes);
 
-       $this->exists = true;
-
-       return $this;
+        return $this;
     }
 
     /**
@@ -99,7 +98,7 @@ abstract class Model
      */
     protected function insert(): bool
     {
-        return ! $this->exists && $this->query()->insert($this->attributes) > 0;
+        return !$this->exists && $this->query()->insert($this->attributes) > 0;
     }
 
     /**
@@ -149,7 +148,7 @@ abstract class Model
 
         $this->attributes[$key] = $value;
 
-        if (! in_array($key, $this->changed)) {
+        if (!in_array($key, $this->changed)) {
             $this->changed[] = $key;
         }
     }
