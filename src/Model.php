@@ -121,10 +121,12 @@ abstract class Model
     }
 
     /**
-     * Устанавливает значение атрибута
+     * Динамическая установка значения атрибута
      */
-    protected function setAttribute(string $key, mixed $value): void
+    public function __set(string $key, mixed $value): void
     {
+        $key = Str::toSnake($key);
+
         if ($key == $this->primaryKey) {
             throw new ModelException(sprintf('Первичный ключ "%s" нельзя редактировать', $key));
         }
@@ -137,26 +139,10 @@ abstract class Model
     }
 
     /**
-     * Получает значение атрибута
-     */
-    protected function getAttribute(string $key): mixed
-    {
-        return $this->attributes[$key] ?? null;
-    }
-
-    /**
      * Динамическое получение значения атрибута
      */
-    public function __set(string $name, mixed $value): void
+    public function __get(string $key): mixed
     {
-         $this->setAttribute(Str::toSnake($name), $value);
-    }
-
-    /**
-     * Динамическая установка значения атрибута
-     */
-    public function __get(string $name): mixed
-    {
-        return $this->getAttribute(Str::toSnake($name));
+        return $this->attributes[Str::toSnake($key)] ?? null;
     }
 }
