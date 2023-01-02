@@ -13,6 +13,16 @@ abstract class Model
     protected string $table = '';
 
     /**
+     * Первичный ключ
+     */
+    protected string $primaryKey = 'id';
+
+    /**
+     * Индикатор существования модели
+     */
+    protected bool $exists = false;
+
+    /**
      * Массив атрибутов модели.
      */
     protected array $attributes = [];
@@ -63,14 +73,66 @@ abstract class Model
     }
 
     /**
+     * Загружает модель
+     */
+    protected function load(array $attributes): static
+    {
+       $this->attributes = array_merge($this->attributes, $attributes);
+
+       $this->exists = true;
+
+       return $this;
+    }
+
+    /**
+     * Добавляет модель в бд
+     */
+    protected function insert(): bool
+    {
+        return ! $this->exists && $this->query()->insert($this->attributes) > 0;
+    }
+
+    /**
+     * Обновляет модель
+     */
+    protected function update(): bool
+    {
+        $key = $this->primaryKey;
+
+        return $this->exists && $this->query()->where($key, '=', $this->attributes[$key])->update($this->changed) > 0;
+    }
+
+    /**
+     * Сохраняет модель
+     */
+    public function save(): bool
+    {
+        return $this->exists ? $this->update() : $this->insert();
+    }
+
+    /**
+     * Удаляет модель
+     */
+    public function remove(): bool
+    {
+        $key = $this->primaryKey;
+
+        return $this->exists && $this->query()->where($key, '=', $this->attributes[$key])->delete() > 0;
+    }
+
+    /**
      * Устанавливает значение атрибута
      */
     protected function setAttribute(string $key, mixed $value): void
     {
+        if ($key == $this->primaryKey) {
+            throw new ModelException(sprintf('Первичный ключ "%s" нельзя редактировать', $key));
+        }
+
         $this->attributes[$key] = $value;
 
         if (! in_array($key, $this->changed)) {
-            $this->changed[] = $key;
+            $this->changed[$key] = $value;
         }
     }
 
@@ -80,14 +142,6 @@ abstract class Model
     protected function getAttribute(string $key): mixed
     {
         return $this->attributes[$key] ?? null;
-    }
-
-    /**
-     * Получает массив всех атрибутов
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
     }
 
     /**
