@@ -97,9 +97,19 @@ abstract class Model
      */
     protected function update(): bool
     {
-        $key = $this->primaryKey;
+        if ($this->exists && !empty($this->changed)) {
+            $changed = [];
 
-        return $this->exists && $this->query()->where($key, '=', $this->attributes[$key])->update($this->changed) > 0;
+            foreach ($this->changed as $c) {
+                $changed[$c] = $this->attributes[$c];
+            }
+
+            $key = $this->primaryKey;
+
+            return $this->query()->where($key, '=', $this->attributes[$key])->update($changed) > 0;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -127,14 +137,10 @@ abstract class Model
     {
         $key = Str::toSnake($key);
 
-        if ($key == $this->primaryKey) {
-            throw new ModelException(sprintf('Первичный ключ "%s" нельзя редактировать', $key));
-        }
-
         $this->attributes[$key] = $value;
 
         if (! in_array($key, $this->changed)) {
-            $this->changed[$key] = $value;
+            $this->changed[] = $key;
         }
     }
 
