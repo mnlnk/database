@@ -96,15 +96,25 @@ abstract class Model
     /**
      * Добавляет модель в бд
      */
-    protected function insert(): bool
+    protected function insert(): string
     {
-        return !$this->exists && $this->query()->insert($this->attributes) > 0;
+        if (!$this->exists && $this->query()->insert($this->attributes) > 0) {
+            $lastInsertId = static::$db->getLastInsertId();
+
+            $this->exists = true;
+            $this->{$this->primaryKey} = $lastInsertId;
+            $this->changed = [];
+
+            return $lastInsertId;
+        }
+
+        return '';
     }
 
     /**
      * Обновляет модель
      */
-    protected function update(): bool
+    protected function update(): string
     {
         if ($this->exists && !empty($this->changed)) {
             $changed = [];
@@ -115,16 +125,20 @@ abstract class Model
 
             $key = $this->primaryKey;
 
-            return $this->query()->where($key, '=', $this->attributes[$key])->update($changed) > 0;
-        } else {
-            return false;
+            if ($this->query()->where($key, '=', $this->attributes[$key])->update($changed) > 0) {
+                $this->changed = [];
+
+                return $this->attributes[$key];
+            }
         }
+
+        return '';
     }
 
     /**
      * Сохраняет модель
      */
-    public function save(): bool
+    public function save(): string
     {
         return $this->exists ? $this->update() : $this->insert();
     }
@@ -134,9 +148,19 @@ abstract class Model
      */
     public function remove(): bool
     {
-        $key = $this->primaryKey;
+        if ($this->exists) {
+            $key = $this->primaryKey;
 
-        return $this->exists && $this->query()->where($key, '=', $this->attributes[$key])->delete() > 0;
+            if ($this->query()->where($key, '=', $this->attributes[$key])->delete() > 0) {
+                $this->exists = false;
+                $this->attributes = [];
+                $this->changed = [];
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
