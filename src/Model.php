@@ -47,6 +47,16 @@ abstract class Model
     }
 
     /**
+     * Конструктор
+     */
+    public function __construct(array $attributes = [])
+    {
+        foreach ($attributes as $attribute => $value) {
+            $this->{$attribute} = $value;
+        }
+    }
+
+    /**
      * Получает экземпляр запроса для таблицы модели
      */
     protected function query(): Query
