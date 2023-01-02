@@ -14,6 +14,11 @@ class DB
      */
     protected static array $queries = [];
 
+    /**
+     * Идентификатор последней добавленной записи
+     */
+    protected string $lastInsertId = '0';
+
 
     /**
      * Конструктор.
@@ -47,6 +52,8 @@ class DB
             $stmt = $pdo->prepare($sql);
             $stmt->execute($params);
 
+            $this->lastInsertId = $pdo->lastInsertId();
+
             $pdo->commit();
 
             return $stmt;
@@ -56,6 +63,14 @@ class DB
 
             throw new PDOException($e->getMessage().', SQL: '.$sql);
         }
+    }
+
+    /**
+     * Получает идентификатор последней добавленной записи
+     */
+    public function getLastInsertId(): string
+    {
+        return $this->lastInsertId;
     }
 
     /**
