@@ -99,13 +99,16 @@ abstract class Model
     protected function insert(): string
     {
         if (!$this->exists && $this->query()->insert($this->attributes) > 0) {
-            $lastInsertId = static::$db->getLastInsertId();
+            $key = $this->primaryKey;
+
+            if (!isset($this->attributes[$key])) {
+                $this->{$this->key} = static::$db->getLastInsertId();
+            }
 
             $this->exists = true;
-            $this->{$this->primaryKey} = $lastInsertId;
             $this->changed = [];
 
-            return $lastInsertId;
+            return $this->attributes[$key];
         }
 
         return '';
