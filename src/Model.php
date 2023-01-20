@@ -61,7 +61,7 @@ abstract class Model
      */
     protected function query(): Query
     {
-        if (!isset(static::$db)) {
+        if (! isset(static::$db)) {
             throw new DBException('Отсутствует экземпляр объекта базы данных.');
         }
 
@@ -73,7 +73,7 @@ abstract class Model
      */
     protected function getTable(): string
     {
-        if (!$this->table) {
+        if (! $this->table) {
             $name = str_replace('Model', '', basename(static::class, 's')).'s';
 
             $this->table = Str::toSnake($name);
@@ -98,10 +98,10 @@ abstract class Model
      */
     protected function insert(): string
     {
-        if (!$this->exists && $this->query()->insert($this->attributes) > 0) {
+        if (! $this->exists && $this->query()->insert($this->attributes) > 0) {
             $key = $this->primaryKey;
 
-            if (!isset($this->attributes[$key])) {
+            if (! isset($this->attributes[$key])) {
                 $this->{$this->key} = static::$db->getLastInsertId();
             }
 
@@ -119,7 +119,7 @@ abstract class Model
      */
     protected function update(): string
     {
-        if ($this->exists && !empty($this->changed)) {
+        if ($this->exists && ! empty($this->changed)) {
             $changed = [];
 
             foreach ($this->changed as $c) {
@@ -175,7 +175,7 @@ abstract class Model
 
         $this->attributes[$key] = $value;
 
-        if (!in_array($key, $this->changed)) {
+        if (! in_array($key, $this->changed)) {
             $this->changed[] = $key;
         }
     }
