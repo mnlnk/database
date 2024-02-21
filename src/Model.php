@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Manuylenko\DataBase;
 
-use Manuylenko\StringHelper\Str;
-
 abstract class Model
 {
     /**
@@ -69,6 +67,14 @@ abstract class Model
     }
 
     /**
+     * Конвертирует строку в нижний регистр
+     */
+    protected function toSnakeCase(string $str): string
+    {
+        return strtolower(ltrim(preg_replace('/[A-Z]/', '_$0', $str), '_'));
+    }
+
+    /**
      * Получает имя таблицы
      */
     protected function getTable(): string
@@ -76,7 +82,7 @@ abstract class Model
         if (! $this->table) {
             $name = str_replace('Model', '', basename(static::class, 's')).'s';
 
-            $this->table = Str::toSnake($name);
+            $this->table = $this->toSnakeCase($name);
         }
 
         return $this->table;
@@ -171,7 +177,7 @@ abstract class Model
      */
     public function __set(string $key, mixed $value): void
     {
-        $key = Str::toSnake($key);
+        $key = $this->toSnakeCase($key);
 
         $this->attributes[$key] = $value;
 
@@ -185,6 +191,6 @@ abstract class Model
      */
     public function __get(string $key): mixed
     {
-        return $this->attributes[Str::toSnake($key)] ?? null;
+        return $this->attributes[$this->toSnakeCase($key)] ?? null;
     }
 }

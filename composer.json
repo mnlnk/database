@@ -16,7 +16,6 @@
   },
   "require": {
     "php": "^8.0",
-    "mnlnk/string": "^0.1",
     "ext-pdo": "*"
   }
 }
